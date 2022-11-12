@@ -10,7 +10,7 @@ You can simply install and use them in your project. Please follow the documenta
 You can simply install this package using Saeghe by running the following command:
 
 ```shell
-saeghe add git@github.com:saeghe/datatype.git
+saeghe add https://github.com/saeghe/datatype.git
 ```
 
 ## Documentation
