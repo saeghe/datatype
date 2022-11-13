@@ -12,5 +12,6 @@ test(
         assert_true('hello universe world' === Str\replace_first_occurrence('hello world world', 'world', 'universe'));
         assert_true('hi world hello' === Str\replace_first_occurrence('hello world hello', 'hello', 'hi'));
         assert_true('' === Str\replace_first_occurrence('', 'hello', 'hi'));
+        assert_true('hello world' === Str\replace_first_occurrence('hello world', 'universe', 'hi'));
     }
 );

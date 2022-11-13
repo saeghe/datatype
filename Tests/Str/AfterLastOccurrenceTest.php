@@ -10,6 +10,7 @@ test(
     case: function () {
         $subject = 'hello world';
         assert_true('' === Str\after_last_occurrence($subject, ''));
+        assert_true(' hello world' === Str\after_last_occurrence('This is hello world', 'This is'));
     }
 );
 

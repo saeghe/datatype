@@ -6,10 +6,11 @@ use Saeghe\Datatype\Str;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 
 test(
-    title: 'it should return empty string when needle is empty',
+    title: 'it should return subject string when needle is empty',
     case: function () {
         $subject = 'hello world';
         assert_true('hello world' === Str\after_first_occurrence($subject, ''));
+        assert_true(' hello world' === Str\after_first_occurrence('This is hello world', 'This is'));
     }
 );
 
