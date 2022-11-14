@@ -4,14 +4,8 @@ namespace Saeghe\Datatype\Str;
 
 function after_first_occurrence(string $subject, string $needle): string
 {
-    if ($needle === '') {
+    if ($needle === '' || ($pos = mb_strpos($subject, $needle)) === false) {
         return $subject;
-    }
-
-    $pos = mb_strpos($subject, $needle);
-
-    if ($pos === false) {
-        return '';
     }
 
     return mb_substr(string: $subject, start: $pos + strlen($needle),  encoding: 'UTF-8');
@@ -19,14 +13,8 @@ function after_first_occurrence(string $subject, string $needle): string
 
 function after_last_occurrence(string $subject, string $needle): string
 {
-    if ($needle === '') {
-        return '';
-    }
-
-    $pos = mb_strrpos($subject, $needle);
-
-    if ($pos === false) {
-        return '';
+    if ($needle === '' || ($pos = mb_strrpos($subject, $needle)) === false) {
+        return $subject;
     }
 
     return mb_substr(string: $subject, start: $pos + strlen($needle),  encoding: 'UTF-8');
@@ -34,14 +22,8 @@ function after_last_occurrence(string $subject, string $needle): string
 
 function before_first_occurrence(string $subject, string $needle): string
 {
-    if ($needle === '') {
-        return '';
-    }
-
-    $pos = mb_strpos($subject, $needle);
-
-    if ($pos === false) {
-        return '';
+    if ($needle === '' || ($pos = mb_strpos($subject, $needle)) === false) {
+        return $subject;
     }
 
     return mb_substr(string: $subject, start: 0, length: $pos,  encoding: 'UTF-8');
@@ -49,13 +31,7 @@ function before_first_occurrence(string $subject, string $needle): string
 
 function before_last_occurrence(string $subject, string $needle): string
 {
-    if ($needle === '') {
-        return $subject;
-    }
-
-    $pos = mb_strrpos($subject, $needle);
-
-    if ($pos === false) {
+    if ($needle === '' || ($pos = mb_strrpos($subject, $needle)) === false) {
         return $subject;
     }
 

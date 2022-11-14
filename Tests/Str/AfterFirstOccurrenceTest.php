@@ -9,7 +9,7 @@ test(
     title: 'it should return subject string when needle is empty',
     case: function () {
         $subject = 'hello world';
-        assert_true('hello world' === Str\after_first_occurrence($subject, ''));
+        assert_true($subject === Str\after_first_occurrence($subject, ''));
         assert_true(' hello world' === Str\after_first_occurrence('This is hello world', 'This is'));
     }
 );
@@ -26,9 +26,9 @@ test(
 );
 
 test(
-    title: 'it should return empty string when needle is not in the subject',
+    title: 'it should return subject string when needle is not in the subject',
     case: function () {
         $subject = 'hello world';
-        assert_true('' === Str\after_first_occurrence($subject, 'my'));
+        assert_true($subject === Str\after_first_occurrence($subject, 'my'));
     }
 );
