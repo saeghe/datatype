@@ -60,6 +60,11 @@ function between(string $subject, string $start, string $end): string
     return substr($second, 0, $position_end);
 }
 
+function first_character(string $subject): string
+{
+    return mb_substr($subject, 0, 1);
+}
+
 function last_character(string $subject): string
 {
     return mb_substr($subject, -1);
