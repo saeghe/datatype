@@ -10,3 +10,8 @@ function insert_after(array $array, mixed $key, array $additional): array
 
     return array_merge(array_slice($array, 0, $pos), $additional, array_slice($array, $pos));
 }
+
+function last(array $array): mixed
+{
+    return $array[array_key_last($array)] ?? null;
+}
