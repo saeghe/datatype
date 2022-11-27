@@ -2,6 +2,13 @@
 
 namespace Saeghe\Datatype;
 
+use function Saeghe\Datatype\Arr\every;
+use function Saeghe\Datatype\Arr\first;
+use function Saeghe\Datatype\Arr\first_key;
+use function Saeghe\Datatype\Arr\has;
+use function Saeghe\Datatype\Arr\last;
+use function Saeghe\Datatype\Arr\last_key;
+
 abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     private array $items;
@@ -46,7 +53,12 @@ abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return $this;
     }
 
-    public function except(?\Closure $closure = null): static
+    public function every(\Closure $check = null): bool
+    {
+        return every($this->items(), $check);
+    }
+
+    public function except(\Closure $closure = null): static
     {
         $closure = $closure ?? function ($value) {
             return (bool) $value;
@@ -63,7 +75,7 @@ abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return new static($results);
     }
 
-    public function filter(?\Closure $closure = null): static
+    public function filter(\Closure $closure = null): static
     {
         if ($closure) {
             $results = [];
@@ -80,6 +92,16 @@ abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return new static(array_filter($this->items));
     }
 
+    public function first_key(\Closure $condition = null): mixed
+    {
+        return first_key($this->items(), $condition);
+    }
+
+    public function first(\Closure $condition = null): mixed
+    {
+        return first($this->items(), $condition);
+    }
+
     public function forget(mixed $key): static
     {
         unset($this->items[$key]);
@@ -92,6 +114,11 @@ abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countabl
         return new \ArrayIterator($this->items);
     }
 
+    public function has(\Closure $closure): bool
+    {
+        return has($this->items(), $closure);
+    }
+
     public function items(): array
     {
         return $this->items;
@@ -100,6 +127,16 @@ abstract class Collection implements \ArrayAccess, \IteratorAggregate, \Countabl
     public function keys(): array
     {
         return array_keys($this->items);
+    }
+
+    public function last_key(\Closure $condition = null): mixed
+    {
+        return last_key($this->items(), $condition);
+    }
+
+    public function last(\Closure $condition = null): mixed
+    {
+        return last($this->items(), $condition);
     }
 
     public function offsetExists(mixed $offset): bool

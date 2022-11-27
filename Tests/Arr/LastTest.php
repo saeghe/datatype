@@ -3,6 +3,7 @@
 namespace Tests\Arr\LastTest;
 
 use function Saeghe\Datatype\Arr\last;
+use function Saeghe\Datatype\Str\first_character;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 
 test(
@@ -32,5 +33,13 @@ test(
     case: function () {
         $arr = [];
         assert_true(null === last($arr));
+    }
+);
+
+test(
+    title: 'it should return the last one that meets the condition',
+    case: function () {
+        $arr = ['foo', 'bar', 'baz'];
+        assert_true('baz' === last($arr, fn ($item) => first_character($item) === 'b'));
     }
 );

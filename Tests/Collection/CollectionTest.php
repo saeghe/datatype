@@ -26,7 +26,7 @@ test(
 );
 
 test(
-    title: 'it can construct a collection with empty array',
+    title: 'it can construct a collection with empty collection',
     case: function () {
         $collection = new class([]) extends Collection {
             public function key_is_valid(mixed $key): bool
