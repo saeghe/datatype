@@ -8,17 +8,7 @@ use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 test(
     title: 'it should reduce collection',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1 => 'foo', 2 => 'bar']);
 
         $actual = $collection->reduce(function ($carry, $value) {
             return $value === 'bar' || $carry;
@@ -31,17 +21,7 @@ test(
 test(
     title: 'it should reduce collection using key',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1 => 'foo', 2 => 'bar']);
 
         $actual = $collection->reduce(function ($carry, $value, $key) {
             return $key === 2 || $carry;
@@ -54,17 +34,7 @@ test(
 test(
     title: 'it should set carry as null when not passed',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1 => 'foo', 2 => 'bar']);
 
         $actual = $collection->reduce(function ($carry) {
             return $carry;

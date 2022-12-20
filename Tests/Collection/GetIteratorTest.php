@@ -8,17 +8,7 @@ use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 test(
     title: 'it should implement getIterator',
     case: function () {
-        $collection = new class(['foo' => 'bar', 'baz' => 'qux']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection(['foo' => 'bar', 'baz' => 'qux']);
 
         $actual = [];
         foreach ($collection as $key => $value) {
