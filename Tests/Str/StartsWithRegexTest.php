@@ -21,6 +21,20 @@ test(
 );
 
 test(
+    title: 'it should check if string starts with given regex for multibyte string',
+    case: function () {
+        $valid = 'Х0та6ыч';
+        $invalid1 = 'Хотабыч';
+        $invalid2 = 'Привет х0та6ыч';
+        $pattern = '[А-Яа-я]\d[А-Яа-я]{2}\d';
+
+        assert_true(starts_with_regex($valid, $pattern));
+        assert_false(starts_with_regex($invalid1, $pattern));
+        assert_false(starts_with_regex($invalid2, $pattern));
+    }
+);
+
+test(
     title: 'it should add extra backslashes when regex finish with backslash',
     case: function () {
         $valid1 = 'c:\\';

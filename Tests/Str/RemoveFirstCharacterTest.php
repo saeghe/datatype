@@ -14,6 +14,14 @@ test(
 );
 
 test(
+    title: 'it should remove first character for multibyte string',
+    case: function () {
+        $subject = 'привет мир';
+        assert_true('ривет мир' === Str\remove_first_character($subject));
+    }
+);
+
+test(
     title: 'it should return empty string when subject is empty',
     case: function () {
         $subject = '';

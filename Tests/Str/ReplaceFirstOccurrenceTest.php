@@ -15,3 +15,10 @@ test(
         assert_true('hello world' === Str\replace_first_occurrence('hello world', 'universe', 'hi'));
     }
 );
+
+test(
+    title: 'it should replace first occurrence of sub string for multibyte string',
+    case: function () {
+        assert_true('привет вселенная' === Str\replace_first_occurrence('привет мир', 'мир', 'вселенная'));
+    }
+);
