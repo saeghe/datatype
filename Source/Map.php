@@ -14,18 +14,20 @@ use function Saeghe\Datatype\Arr\first_key;
 use function Saeghe\Datatype\Arr\forget;
 use function Saeghe\Datatype\Arr\has;
 use function Saeghe\Datatype\Arr\last;
-use function Saeghe\Datatype\Arr\last_key;
 use function Saeghe\Datatype\Arr\map;
 use function Saeghe\Datatype\Arr\reduce;
 use function Saeghe\Datatype\Arr\take;
 
-class Collection implements ArrayAccess, IteratorAggregate, Countable
+class Map implements ArrayAccess, IteratorAggregate, Countable
 {
     protected array $items;
 
-    public function __construct(?array $init = [])
+    public function __construct(array $init = [])
     {
-        $this->items = $init;
+        $this->items = [];
+        foreach ($init as $index => $item) {
+            $this->put($item, $index);
+        }
     }
 
     public function count(): int
@@ -44,51 +46,36 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
 
     public function every(Closure $check = null): bool
     {
-        return every($this->items(), $check);
+        $check = $check ? fn (Pair $pair) => $check($pair) : fn (Pair $pair) => $pair->value;
+
+        return every($this->items, $check);
     }
 
     public function except(Closure $check = null): static
     {
-        $check = $check ?? function ($value) {
-            return (bool) $value;
+        $check = $check ?? function (Pair $pair) {
+            return (bool) $pair->value;
         };
 
-        $results = [];
-
-        $this->each(function ($value, $key) use (&$results, $check) {
-            if (! $check($value, $key)) {
-                $results[$key] = $value;
+        return $this->reduce(function (Map $results, Pair $pair, mixed $index) use ($check) {
+            if (! $check($pair, $index)) {
+                $results->put($pair, $index);
             }
-        });
 
-        return new static($results);
+            return $results;
+        }, new static([]));
     }
 
-    public function filter(Closure $closure = null): static
+    public function first_key(Closure $closure = null): null|int|string
     {
-        if ($closure) {
-            $results = [];
+        $key = first_key($this->items, $closure);
 
-            $this->each(function ($value, $key) use (&$results, $closure) {
-                if ($closure($value, $key)) {
-                    $results[$key] = $value;
-                }
-            });
-
-            return new static($results);
-        }
-
-        return new static(array_filter($this->items));
+        return $this->items[$key]?->key;
     }
 
-    public function first_key(Closure $condition = null): string|int|null
+    public function first(Closure $condition = null): ?Pair
     {
-        return first_key($this->items(), $condition);
-    }
-
-    public function first(Closure $condition = null): mixed
-    {
-        return first($this->items(), $condition);
+        return first($this->items, $condition);
     }
 
     public function forget(Closure $condition): static
@@ -113,24 +100,23 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
         return $this->items;
     }
 
+    public function last(Closure $condition = null): ?Pair
+    {
+        return last($this->items, $condition);
+    }
+
     public function keys(): array
     {
-        return array_keys($this->items);
+        $keys = [];
+        foreach ($this->items as $item) {
+            $keys[] = $item->key;
+        }
+        return $keys;
     }
 
-    public function last_key(Closure $condition = null): string|int|null
+    public function map(Closure $callable): array
     {
-        return last_key($this->items(), $condition);
-    }
-
-    public function last(Closure $condition = null): mixed
-    {
-        return last($this->items(), $condition);
-    }
-
-    public function map(Closure $closure): array
-    {
-        return map($this->items(), $closure);
+        return map($this->items, $callable);
     }
 
     public function offsetExists(mixed $offset): bool
@@ -153,14 +139,20 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
         unset($this->items[$offset]);
     }
 
-    public function push(mixed $value): static
+    public function push(Pair $item): static
     {
-        return $this->put($value);
+        return $this->put($item);
     }
 
-    public function put(mixed $value, int|string|null $key = null): static
+    public function put(Pair $item, int|string|null $index = null): static
     {
-        is_null($key) ? $this->items[] = $value : $this->items[$key] = $value;
+        $index = is_null($index) ? array_search($item->key, array_values($this->keys())) : $index;
+
+        if ($index === false) {
+            $this->items[] = $item;
+        } else {
+            $this->items[$index] = $item;
+        }
 
         return $this;
     }
@@ -170,13 +162,17 @@ class Collection implements ArrayAccess, IteratorAggregate, Countable
         return reduce($this->items, $closure, $carry);
     }
 
-    public function take(Closure $condition): mixed
+    public function take(Closure $condition): ?Pair
     {
         return take($this->items, $condition);
     }
 
     public function values(): array
     {
-        return array_values($this->items);
+        $values = [];
+        foreach ($this->items as $item) {
+            $values[] = $item->value;
+        }
+        return $values;
     }
 }

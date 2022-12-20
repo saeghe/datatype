@@ -6,40 +6,20 @@ use Saeghe\Datatype\Collection;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 
 test(
-    title: 'it should forget items from the collection by given key',
+    title: 'it should forget items from the collection by given condition',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar', 3 => 'baz']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
+        $collection = new Collection([1 => 'foo', 2 => 'bar', 3 => 'baz']);
+        $collection->forget(fn ($item, $key) => $item === 'foo' || $key === 2);
 
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
-        $collection->forget(2);
-
-        assert_true([1 => 'foo', 3 => 'baz'] === $collection->items());
+        assert_true([3 => 'baz'] === $collection->items());
     }
 );
 
 test(
-    title: 'it should do nothing when the key not exists',
+    title: 'it should do nothing when the check returns null for items',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
-        $collection->forget(3);
+        $collection = new Collection([1 => 'foo', 2 => 'bar']);
+        $collection->forget(fn ($item, $key) => $item === 'hello worlds');
 
         assert_true([1 => 'foo', 2 => 'bar'] === $collection->items());
     }

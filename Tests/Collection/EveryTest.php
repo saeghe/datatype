@@ -9,29 +9,9 @@ use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 test(
     title: 'it return true when every item has value',
     case: function () {
-        $collection = new class([1, 2, 3]) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1, 2, 3]);
         assert_true($collection->every());
-        $collection = new class(['foo', 'bar', 'baz']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection(['foo', 'bar', 'baz']);
         assert_true($collection->every());
     }
 );
@@ -39,17 +19,7 @@ test(
 test(
     title: 'it return false when items are empty',
     case: function () {
-        $collection = new class([null, 0, '', []]) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([null, 0, '', []]);
         assert_false($collection->every());
     }
 );
@@ -57,43 +27,13 @@ test(
 test(
     title: 'it should return true when every item passes the check',
     case: function () {
-        $collection = new class(['foo', 'bar', 'baz']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection(['foo', 'bar', 'baz']);
         assert_true($collection->every(fn ($item) => is_string($item)));
 
-        $collection = new class(['foo', 'bar', 'baz']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection(['foo', 'bar', 'baz']);
         assert_true($collection->every(fn ($item, $key) => is_numeric($key)));
 
-        $collection = new class(['foo', 'bar', 'baz']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection(['foo', 'bar', 'baz']);
         assert_false($collection->every(fn ($item, $key) => strlen($item) > 3));
     }
 );

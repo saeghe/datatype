@@ -2,7 +2,9 @@
 
 namespace Saeghe\Datatype\Arr;
 
-function every(array $array, \Closure $check = null): bool
+use Closure;
+
+function every(array $array, Closure $check = null): bool
 {
     if (is_callable($check)) {
         foreach ($array as $key => $value) {
@@ -17,22 +19,7 @@ function every(array $array, \Closure $check = null): bool
     return ! empty(array_filter($array));
 }
 
-function first(array $array, \Closure $condition = null): mixed
-{
-    if (is_callable($condition)) {
-        foreach ($array as $key => $value) {
-            if ($condition($value, $key)) {
-                return $value;
-            }
-        }
-
-        return null;
-    }
-
-    return $array[array_key_first($array)] ?? null;
-}
-
-function first_key(array $array, \Closure $condition = null): mixed
+function first_key(array $array, Closure $condition = null): string|int|null
 {
     if (is_callable($condition)) {
         foreach ($array as $key => $value) {
@@ -47,7 +34,33 @@ function first_key(array $array, \Closure $condition = null): mixed
     return array_key_first($array) ?? null;
 }
 
-function has(array $array, \Closure $closure): bool
+function first(array $array, Closure $condition = null): mixed
+{
+    if (is_callable($condition)) {
+        foreach ($array as $key => $value) {
+            if ($condition($value, $key)) {
+                return $value;
+            }
+        }
+
+        return null;
+    }
+
+    return $array[array_key_first($array)] ?? null;
+}
+
+function forget(array $array, Closure $condition): array
+{
+    foreach ($array as $key => $value) {
+        if ($condition($value, $key)) {
+            unset($array[$key]);
+        }
+    }
+
+    return $array;
+}
+
+function has(array $array, Closure $closure): bool
 {
     foreach ($array as $key => $value) {
         if ($closure($value, $key)) {
@@ -67,7 +80,21 @@ function insert_after(array $array, mixed $key, array $additional): array
     return array_merge(array_slice($array, 0, $pos), $additional, array_slice($array, $pos));
 }
 
-function last(array $array, \Closure $condition = null): mixed
+function last_key(array $array, Closure $condition = null): null|int|string
+{
+    if (is_callable($condition)) {
+        $last = null;
+        foreach ($array as $key => $value) {
+            $last = $condition($value, $key) ? $key : $last;
+        }
+
+        return $last;
+    }
+
+    return array_key_last($array) ?? null;
+}
+
+function last(array $array, Closure $condition = null): mixed
 {
     if (is_callable($condition)) {
         $last = null;
@@ -81,16 +108,29 @@ function last(array $array, \Closure $condition = null): mixed
     return $array[array_key_last($array)] ?? null;
 }
 
-function last_key(array $array, \Closure $condition = null): mixed
+function map(array $array, Closure $callback): array
 {
-    if (is_callable($condition)) {
-        $last = null;
-        foreach ($array as $key => $value) {
-            $last = $condition($value, $key) ? $key : $last;
-        }
+    return array_map($callback, array_values($array), array_keys($array));
+}
 
-        return $last;
+function reduce(array $array, Closure $callback, mixed $carry = null): mixed
+{
+    return array_reduce(
+        array_keys($array),
+        fn ($carry, $key) => $callback($carry, $array[$key], $key),
+        $carry
+    );
+}
+
+function take(array &$array, Closure $condition): mixed
+{
+    if (is_null($key = first_key($array, $condition))) {
+        return null;
     }
 
-    return array_key_last($array) ?? null;
+    $result = $array[$key];
+
+    unset($array[$key]);
+
+    return $result;
 }

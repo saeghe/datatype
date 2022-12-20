@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Collection\FilterTest;
+namespace Tests\Collection\EachTest;
 
 use Saeghe\Datatype\Collection;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
@@ -8,17 +8,7 @@ use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 test(
     title: 'it should return except items by given closure',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => 'bar', 3 => 'baz', 4 => 'qux']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1 => 'foo', 2 => 'bar', 3 => 'baz', 4 => 'qux']);
 
         $result = $collection->except(function ($value, $key) {
             return $key === 2 || $value === 'baz';
@@ -32,17 +22,7 @@ test(
 test(
     title: 'it should return empty values when closure not passed',
     case: function () {
-        $collection = new class([1 => 'foo', 2 => '', 3 => null, 4 => 'qux', 5 => 0, null => 'value', '' => 'string']) extends Collection {
-            public function key_is_valid(mixed $key): bool
-            {
-                return true;
-            }
-
-            public function value_is_valid(mixed $value): bool
-            {
-                return true;
-            }
-        };
+        $collection = new Collection([1 => 'foo', 2 => '', 3 => null, 4 => 'qux', 5 => 0, null => 'value', '' => 'string']);
 
         $result = $collection->except();
 
