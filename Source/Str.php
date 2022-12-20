@@ -8,7 +8,7 @@ function after_first_occurrence(string $subject, string $needle): string
         return $subject;
     }
 
-    return mb_substr(string: $subject, start: $pos + strlen($needle),  encoding: 'UTF-8');
+    return mb_substr(string: $subject, start: $pos + mb_strlen($needle),  encoding: 'UTF-8');
 }
 
 function after_last_occurrence(string $subject, string $needle): string
@@ -17,7 +17,7 @@ function after_last_occurrence(string $subject, string $needle): string
         return $subject;
     }
 
-    return mb_substr(string: $subject, start: $pos + strlen($needle),  encoding: 'UTF-8');
+    return mb_substr(string: $subject, start: $pos + mb_strlen($needle),  encoding: 'UTF-8');
 }
 
 function before_first_occurrence(string $subject, string $needle): string
@@ -72,12 +72,12 @@ function last_character(string $subject): string
 
 function remove_first_character(string $subject): string
 {
-    return substr_replace($subject ,"",0, 1);
+    return mb_substr($subject ,1);
 }
 
 function remove_last_character(string $subject): string
 {
-    return substr_replace($subject ,"",-1);
+    return mb_substr($subject, 0, mb_strlen($subject) - 1);
 }
 
 function replace_first_occurrence(string $subject, string $search, string $replace): string
@@ -94,5 +94,5 @@ function starts_with_regex(string $subject, string $pattern): bool
 {
     $pattern = str_ends_with($pattern, '\\') ? $pattern . '\\' : $pattern;
 
-    return preg_match("/^$pattern/", $subject);
+    return preg_match("/^$pattern/u", $subject);
 }

@@ -27,6 +27,14 @@ test(
 );
 
 test(
+    title: 'it should return the substring after the last occurrence for multibyte string',
+    case: function () {
+        $subject = 'Привет мир!';
+        assert_true('р!' === Str\after_last_occurrence($subject, 'и'));
+    }
+);
+
+test(
     title: 'it should return subject string when needle is not in the subject',
     case: function () {
         $subject = 'hello world';
