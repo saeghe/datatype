@@ -26,6 +26,14 @@ test(
 );
 
 test(
+    title: 'it should return the substring after the first occurrence for multibyte string',
+    case: function () {
+        $subject = 'Привет мир!';
+        assert_true('мир!' === Str\after_first_occurrence($subject, 'Привет '));
+    }
+);
+
+test(
     title: 'it should return subject string when needle is not in the subject',
     case: function () {
         $subject = 'hello world';
