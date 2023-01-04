@@ -2,6 +2,8 @@
 
 namespace Tests\Collection\CollectionTest;
 
+use ArrayAccess;
+use Countable;
 use Saeghe\Datatype\Collection;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 

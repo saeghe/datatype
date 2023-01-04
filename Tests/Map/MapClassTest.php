@@ -2,6 +2,7 @@
 
 namespace Tests\Map\MapClassTest;
 
+use Countable;
 use Saeghe\Datatype\Map;
 use Saeghe\Datatype\Pair;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
@@ -32,7 +33,7 @@ test(
     title: 'it should return count of the items',
     case: function () {
         $map = new Map();
-        assert_true($map instanceof \Countable);
+        assert_true($map instanceof Countable);
 
         assert_true(0 === count($map));
 

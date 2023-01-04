@@ -3,6 +3,7 @@
 namespace Tests\Text\TextTest;
 
 use Saeghe\Datatype\Text;
+use Stringable;
 use function Saeghe\TestRunner\Assertions\Boolean\assert_true;
 
 test(
@@ -27,7 +28,7 @@ test(
 test(
     title: 'it can construct a text with stringable object',
     case: function () {
-        $stringable = new class(['a' => 'b']) implements \Stringable {
+        $stringable = new class(['a' => 'b']) implements Stringable {
             public function __construct(private array $arr) {}
 
             public function __toString(): string
