@@ -32,7 +32,6 @@ test(
     title: 'it should return null when the given collection is empty',
     case: function () {
         $collection = new Collection([]);
-        $arr = [];
         assert_true(null === $collection->last());
     }
 );
